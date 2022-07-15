@@ -1,0 +1,37 @@
+*~
+*.swp
+tmp/
+npm-debug.log
+.DS_Store
+.idea
+merged/
+.next
+.vscode/
+node_modules/
+resources.txt
+.env
+.versionFilesList.json
+build/
+bin/
+notes.txt
+typechain
+
+#Hardhat files
+cache
+artifacts
+
+# OpenZeppelin
+.openzeppelin/dev-*.json
+.openzeppelin/.session
+deployments/hardhat/*.json
+
+# Code Coverage
+coverage
+.coverage
+coverage.json
+coverageEnv
+artifacts
+test-results.xml
+yarn-error.log
+.openzeppelin/unknown-31337.json
+deployments/hardhat/solcInputs/

@@ -1,0 +1,56 @@
+{
+  "name": "@charged-particles/erc721i",
+  "version": "0.1.4",
+  "license": "MIT",
+  "keywords": [
+    "ethereum",
+    "nft",
+    "solidity"
+  ],
+  "engines": {
+    "node": ">=14.18.3",
+    "npm": ">=6.14.15"
+  },
+  "scripts": {
+    "reinstall": "rm -rf node_modules && rm -f yarn.lock && yarn clean && yarn",
+    "clean": "rm -rf build cache coverage coverage.json test-results.xml",
+    "clean-test": "rm -rf abis .openzeppelin/${npm_config_network:-'unknown-31337'}.json deployments/${npm_config_network:-hardhat}/*.json test-results.xml",
+    "compile": "hardhat --show-stack-traces --max-memory 8192 compile",
+    "deploy": "hardhat run scripts/deploy.js --network",
+    "test": "hardhat test",
+    "watch-test": "hardhat watch test",
+    "hint": "eslint '**/*.js' && solhint 'contracts/**/*.sol'",
+    "coverage": "yarn clean-test && yarn compile && hardhat --show-stack-traces coverage --temp coverage_build && yarn clean-test",
+    "gas": "REPORT_GAS=true hardhat test",
+    "start": "hardhat node --port 8545",
+    "verify": "hardhat run scripts/verify.js --network",
+    "gen-docs": "solidity-docgen -i contracts -o docs"
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.1.0",
+    "@nomiclabs/hardhat-etherscan": "^3.1.0",
+    "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "@openzeppelin/cli": "^2.8.2",
+    "@openzeppelin/contracts": "^4.7.0",
+    "eslint": "^8.19.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^26.5.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "ethereum-waffle": "^3.4.4",
+    "ethers": "^5.6.9",
+    "hardhat": "^2.9.9",
+    "hardhat-abi-exporter": "^2.10.0",
+    "hardhat-deploy": "^0.11.11",
+    "hardhat-gas-reporter": "^1.0.8",
+    "lodash": "^4.17.21",
+    "solc": "^0.8.4",
+    "solhint": "^3.3.7",
+    "solidity-coverage": "^0.7.21",
+    "solidity-docgen": "^0.6.0-beta.18"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.1"
+  }
+}
