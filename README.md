@@ -21,7 +21,7 @@ By eliminating the heavy-lifting of Minting, we can help to alleviate some of th
 
 ![Gas Savings](https://gateway.pinata.cloud/ipfs/Qmb7KFXTunaAomQDZQ5rHvnniozgDQTtLjQ8DGPS6sWHK9?c=369)
 
-For more information on how Infinite (ERC721i) works under the hood, please visit our [blog](https://medium.com/charged-particles/...).
+For more information on how Infinite (ERC721i) works under the hood, please visit our [blog](https://medium.com/charged-particles/infinite-erc721i-pre-minting-1-million-nfts-for-3-9a791a1f9a33).
 
 **These contracts, while simple, have not been audited. Charged Particles, and its affiliates, are not liable for any outcome as a result of using Infinite (ERC721i).**
 
@@ -29,7 +29,7 @@ For more information on how Infinite (ERC721i) works under the hood, please visi
 ---
 ## Blog Article
 
-[Pre-Minting 1 Million NFTs for $3](https://medium.com/charged-particles/...)
+[Pre-Minting 1 Million NFTs for $3](https://medium.com/charged-particles/infinite-erc721i-pre-minting-1-million-nfts-for-3-9a791a1f9a33)
 
 
 ---
