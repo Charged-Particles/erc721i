@@ -26,6 +26,10 @@ For more information on how Infinite (ERC721i) works under the hood, please visi
 **These contracts, while simple, have not been audited. Charged Particles, and its affiliates, are not liable for any outcome as a result of using Infinite (ERC721i).**
 
 
+## Don't Trust, Verify
+
+[Etherscan Transaction](https://etherscan.io/tx/0xcbbe7583cd48b019dc2bcff3cd10526029afe966fed6695ef023315f233ebe2d)
+
 ---
 ## Blog Article
 
