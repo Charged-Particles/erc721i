@@ -131,26 +131,34 @@ abstract contract ERC721iEnumerable is ERC721, IERC721Enumerable {
     _ownedTokensIndex[tokenId] = length;
   }
 
-  /**
-    * @dev See {IERC721Enumerable-_removeTokenFromOwnerEnumeration}.
-    */
-  function _removeTokenFromOwnerEnumeration(address from, uint256 tokenId) private {
-    // To prevent a gap in from's tokens array, we store the last token in the index of the token to delete, and
-    // then delete the last slot (swap and pop).
+   /**
+     * @dev See {IERC721Enumerable-_removeTokenFromOwnerEnumeration}.
+     */
+    function _removeTokenFromOwnerEnumeration(address from, uint256 tokenId)
+        private
+    {
+        // To prevent a gap in from's tokens array, we store the last token in the index of the token to delete, and
+        // then delete the last slot (swap and pop).
+        // We do additional checks in the case "from" is the _preMintReceiver
 
-    uint256 lastTokenIndex = ERC721.balanceOf(from) - 1;
-    uint256 tokenIndex = _ownedTokensIndex[tokenId];
+        uint256 lastTokenIndex = ERC721.balanceOf(from) - 1;
+        uint256 tokenIndex = (ownerOf(tokenId) == _preMintReceiver)
+            ? tokenId - 1
+            : _ownedTokensIndex[tokenId];
 
-    // When the token to delete is the last token, the swap operation is unnecessary
-    if (tokenIndex != lastTokenIndex) {
-      uint256 lastTokenId = _ownedTokens[from][lastTokenIndex];
+        // When the token to delete is the last token, the swap operation is unnecessary
+        if (tokenIndex != lastTokenIndex) {
+            uint256 lastTokenId = (ownerOf(tokenId) == _preMintReceiver &&
+                _ownedTokens[from][lastTokenIndex] == 0)
+                ? ERC721.balanceOf(from)
+                : _ownedTokens[from][lastTokenIndex];
 
-      _ownedTokens[from][tokenIndex] = lastTokenId; // Move the last token to the slot of the to-delete token
-      _ownedTokensIndex[lastTokenId] = tokenIndex; // Update the moved token's index
+            _ownedTokens[from][tokenIndex] = lastTokenId; // Move the last token to the slot of the to-delete token
+            _ownedTokensIndex[lastTokenId] = tokenIndex; // Update the moved token's index
+        }
+
+        // This also deletes the contents at the last position of the array
+        delete _ownedTokensIndex[tokenId];
+        delete _ownedTokens[from][lastTokenIndex];
     }
-
-    // This also deletes the contents at the last position of the array
-    delete _ownedTokensIndex[tokenId];
-    delete _ownedTokens[from][lastTokenIndex];
-  }
 }
