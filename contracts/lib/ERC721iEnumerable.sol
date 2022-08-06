@@ -142,7 +142,8 @@ abstract contract ERC721iEnumerable is ERC721, IERC721Enumerable {
         // We do additional checks in the case "from" is the _preMintReceiver
 
         uint256 lastTokenIndex = ERC721.balanceOf(from) - 1;
-        uint256 tokenIndex = (ownerOf(tokenId) == _preMintReceiver)
+        uint256 tokenIndex = (ownerOf(tokenId) == _preMintReceiver &&
+            _owners[tokenId] == address(0))
             ? tokenId - 1
             : _ownedTokensIndex[tokenId];
 
