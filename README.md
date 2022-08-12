@@ -19,7 +19,7 @@ We have created Infinite (ERC721i) by utilizing and only slightly adapting the p
 
 By eliminating the heavy-lifting of Minting, we can help to alleviate some of the network congestion caused when there is huge demand for a new token release. Miners are simply able to process more "transfers" than "mints" in a single block.
 
-![Gas Savings](https://gateway.pinata.cloud/ipfs/Qmb7KFXTunaAomQDZQ5rHvnniozgDQTtLjQ8DGPS6sWHK9?c=369)
+![Gas Savings](measurements_circled.png)
 
 For more information on how Infinite (ERC721i) works under the hood, please visit our [blog](https://medium.com/charged-particles/infinite-erc721i-pre-minting-1-million-nfts-for-3-9a791a1f9a33).
 
