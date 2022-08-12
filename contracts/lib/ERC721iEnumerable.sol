@@ -41,37 +41,45 @@ abstract contract ERC721iEnumerable is ERC721, IERC721Enumerable {
     * Note on Pre-Mint: this implementation maintains the exact same interface for IERC721Enumerable
     */
   function supportsInterface(bytes4 interfaceId) public view virtual override(IERC165, ERC721) returns (bool) {
-      return interfaceId == type(IERC721Enumerable).interfaceId || super.supportsInterface(interfaceId);
+    return interfaceId == type(IERC721Enumerable).interfaceId || super.supportsInterface(interfaceId);
   }
 
   /**
     * @dev See {IERC721Enumerable-tokenOfOwnerByIndex}.
+    * note: Fix contributed by surfer77
     */
   function tokenOfOwnerByIndex(address owner, uint256 index) public view virtual override returns (uint256) {
-      require(index < ERC721.balanceOf(owner), "ERC721Enumerable: owner index out of bounds");
-      uint256 tokenId = _ownedTokens[owner][index];
-      // All indices within the Pre-Mint range are base-1 sequential and owned by the Pre-Mint Receiver.
-      if (tokenId == 0 && owner == _preMintReceiver) {
-        tokenId = index + 1;
+    require(index < ERC721.balanceOf(owner), "ERC721Enumerable: owner index out of bounds");
+    if (owner == address(_preMintReceiver)) {
+      uint256 supply = totalSupply();
+      uint256 matched = 0;
+      for (uint256 i = 1; i < supply; i++) {
+        if (ownerOf(i) == address(_preMintReceiver)) {
+          matched += 1;
+          if (matched - 1 == index) {
+            return i;
+          }
+        }
       }
-      return tokenId;
+    }
+    return _ownedTokens[owner][index];
   }
 
   /**
     * @dev See {IERC721Enumerable-totalSupply}.
     */
   function totalSupply() public view virtual override returns (uint256) {
-      // The Total Supply is simply the Max Supply
-      return _maxSupply;
+    // The Total Supply is simply the Max Supply
+    return _maxSupply;
   }
 
   /**
     * @dev See {IERC721Enumerable-tokenByIndex}.
     */
   function tokenByIndex(uint256 index) public view virtual override returns (uint256) {
-      require(index < _maxSupply, "ERC721Enumerable: global index out of bounds");
-      // Array index is 0-based, whereas Token ID is 1-based (sequential).
-      return index + 1;
+    require(index < _maxSupply, "ERC721Enumerable: global index out of bounds");
+    // Array index is 0-based, whereas Token ID is 1-based (sequential).
+    return index + 1;
   }
 
   /**
