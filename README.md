@@ -7,7 +7,7 @@
 
 
 ---
-## About Infinite (ERC721i) NFT Pre-Mint Contracts v0.1.4
+## About Infinite (ERC721i) NFT Pre-Mint Contracts v0.1.5
 
 Gas-efficient contracts for Pre-Minting 1,000,000,000 NFTs!
 
