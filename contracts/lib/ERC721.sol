@@ -30,7 +30,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     using Address for address;
     using Strings for uint256;
 
-    address constant internal _ZERO_ADDRESS = 0x000000000000000000000000000000000000dEaD;
+    address constant internal _NULL_ADDRESS = 0x000000000000000000000000000000000000dEaD;
 
     // Token name
     string private _name;
@@ -322,7 +322,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
 
         _balances[owner] -= 1;
         // Prevent re-assigning the token back to the Pre-Mint Receiver
-        _owners[tokenId] = _ZERO_ADDRESS;
+        _owners[tokenId] = _NULL_ADDRESS;
 
         emit Transfer(owner, address(0), tokenId);
 

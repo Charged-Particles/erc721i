@@ -9,15 +9,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "./lib/ERC721.sol";
 
 /**
- * @dev This implements a Pre-Mint version of {ERC721} that adds the ability to Pre-Mint
- * all the token ids in the contract as assign an initial owner for each token id.
- *
- * On-chain state for Pre-Mint does not need to be initially stored if Max-Supply is known.
- * Minting is a simple matter of assigning a balance to the pre-mint receiver,
- * and modifying the "read" methods to account for the pre-mint receiver as owner.
- * We use the Consecutive Transfer Method as defined in EIP-2309 to signal inital ownership.
- * Almost everything else remains standard.
- * We also default to the contract "owner" as the pre-mint receiver, but this can be changed.
+ * @dev todo...
  */
 contract ERC721all is
   Ownable,
@@ -106,6 +98,6 @@ contract ERC721all is
 
   function _isTokenActive(uint256 tokenId) internal returns (bool) {
     // Check if Token is Active and Not Burned
-    return (_activeTokens[tokenId] && _owners[ownerTokenId] != _ZERO_ADDRESS);
+    return (_activeTokens[tokenId] && _owners[ownerTokenId] != _NULL_ADDRESS);
   }
 }
