@@ -3,17 +3,15 @@
 // Co-founder @ Charged Particles - Visit: https://charged.fi
 // Co-founder @ Taggr             - Visit: https://taggr.io
 
-pragma solidity 0.8.4;
+pragma solidity 0.8.20;
 
 import "@openzeppelin/contracts/utils/Address.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "./ERC721i.sol";
 
 // Demo of ERC721i
 contract DemoNFT is ERC721i, ReentrancyGuard {
   using Address for address payable;
-  using Counters for Counters.Counter;
 
   /// @dev Some sales-related events
   event Purchase(address indexed newOwner, uint256 amount, uint256 lastTokenId);
@@ -21,7 +19,7 @@ contract DemoNFT is ERC721i, ReentrancyGuard {
   event PriceUpdate(uint256 newPrice);
 
   /// @dev Track number of tokens sold
-  Counters.Counter internal _lastPurchasedTokenId;
+  uint256 internal _lastPurchasedTokenId;
 
   /// @dev ERC721 Base Token URI
   string internal _baseTokenURI;
@@ -58,7 +56,7 @@ contract DemoNFT is ERC721i, ReentrancyGuard {
    * save even more gas for our users.
    */
   function purchase(uint256 amount) external payable virtual nonReentrant returns (uint256 amountTransferred) {
-    uint256 index = _lastPurchasedTokenId.current();
+    uint256 index = _lastPurchasedTokenId;
     if (index + amount > _maxSupply) {
         amount = _maxSupply - index;
     }
@@ -71,12 +69,12 @@ contract DemoNFT is ERC721i, ReentrancyGuard {
 
     uint256[] memory tokenIds = new uint256[](amount);
     for (uint256 i = 0; i < amount; i++) {
-      _lastPurchasedTokenId.increment();
-      tokenIds[i] = _lastPurchasedTokenId.current();
+      _lastPurchasedTokenId += 1;
+      tokenIds[i] = _lastPurchasedTokenId;
     }
     amountTransferred = _batchTransfer(owner(), _msgSender(), tokenIds);
 
-    emit Purchase(_msgSender(), amount, _lastPurchasedTokenId.current());
+    emit Purchase(_msgSender(), amount, _lastPurchasedTokenId);
 
     // Refund overspend
     if (msg.value > cost) {

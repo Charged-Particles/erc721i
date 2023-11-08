@@ -3,7 +3,7 @@
 // Co-founder @ Charged Particles - Visit: https://charged.fi
 // Co-founder @ Taggr             - Visit: https://taggr.io
 
-pragma solidity 0.8.4;
+pragma solidity 0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./lib/ERC721.sol";
@@ -11,20 +11,16 @@ import "./lib/ERC721.sol";
 /**
  * @dev todo...
  */
-contract ERC721all is
-  Ownable,
-  ERC721
-{
+contract ERC721all is Ownable, ERC721 {
   mapping(uint256 => bool) internal _activeTokens;
 
-  constructor(string memory name, string memory symbol) ERC721(name, symbol) {}
+  constructor(string memory name, string memory symbol) ERC721(name, symbol) Ownable(msg.sender) {}
 
   /**
    * @dev Overrides {IERC721-balanceOf}.
    */
   function balanceOf(address owner) public view override returns (uint256) {
     require(owner != address(0), "ERC721: address zero is not a valid owner");
-    uint256 ownerTokenId = uint256(owner);
     if (_balances[owner] == 0 && _hasOwnToken(owner)) {
       return 1;
     }
@@ -41,7 +37,7 @@ contract ERC721all is
     // otherwise the token ID represents the initial owner
     address owner = _owners[tokenId];
     if (owner == address(0)) {
-      owner = address(tokenId);
+      owner = address(uint160(tokenId));
     }
     return owner;
   }
@@ -52,7 +48,7 @@ contract ERC721all is
 
   function _mint(address receiver) internal {
     // Token ID == Minter Address
-    uint256 tokenId = uint256(receiver);
+    uint256 tokenId = uint256(uint160(receiver));
 
     require(receiver != address(0), "ERC721: mint to the zero address");
     require(!_isTokenActive(tokenId), "ERC721: token already minted");
@@ -64,12 +60,11 @@ contract ERC721all is
     emit Transfer(address(0), receiver, tokenId);
   }
 
-
   function _transfer(
     address from,
     address to,
     uint256 tokenId
-  ) internal {
+  ) internal override {
     require(ownerOf(tokenId) == from, "ERC721: transfer from incorrect owner");
     require(to != address(0), "ERC721: transfer to the zero address");
 
@@ -90,14 +85,14 @@ contract ERC721all is
     _afterTokenTransfer(from, to, tokenId);
   }
 
-  function _hasOwnToken(address owner) internal returns (bool) {
-    uint256 ownerTokenId = uint256(owner);
+  function _hasOwnToken(address owner) internal view returns (bool) {
+    uint256 ownerTokenId = uint256(uint160(owner));
     address currentOwner = _owners[ownerTokenId];
     return (_isTokenActive(ownerTokenId) && (currentOwner == owner || currentOwner == address(0)));
   }
 
-  function _isTokenActive(uint256 tokenId) internal returns (bool) {
+  function _isTokenActive(uint256 tokenId) internal view returns (bool) {
     // Check if Token is Active and Not Burned
-    return (_activeTokens[tokenId] && _owners[ownerTokenId] != _NULL_ADDRESS);
+    return (_activeTokens[tokenId] && _owners[tokenId] != _NULL_ADDRESS);
   }
 }

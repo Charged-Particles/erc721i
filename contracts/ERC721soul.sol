@@ -3,7 +3,7 @@
 // Co-founder @ Charged Particles - Visit: https://charged.fi
 // Co-founder @ Taggr             - Visit: https://taggr.io
 
-pragma solidity 0.8.4;
+pragma solidity 0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./lib/ERC721.sol";
@@ -11,13 +11,10 @@ import "./lib/ERC721.sol";
 /**
  * @dev todo...
  */
-contract ERC721soul is
-  Ownable,
-  ERC721
-{
+contract ERC721soul is Ownable, ERC721 {
   mapping(uint256 => bool) internal _activeTokens;
 
-  constructor(string memory name, string memory symbol) ERC721(name, symbol) {}
+  constructor(string memory name, string memory symbol) ERC721(name, symbol) Ownable(msg.sender) {}
 
   /**
    * @dev Overrides {IERC721-balanceOf}.
@@ -32,7 +29,7 @@ contract ERC721soul is
    */
   function ownerOf(uint256 tokenId) public view override returns (address) {
     require(_isTokenActive(tokenId), "ERC721: invalid token ID");
-    return address(tokenId);
+    return address(uint160(tokenId));
   }
 
   function mint() public {
@@ -41,7 +38,7 @@ contract ERC721soul is
 
   function _mint(address receiver) internal {
     // Token ID == Minter Address
-    uint256 tokenId = uint256(receiver);
+    uint256 tokenId = uint256(uint160(receiver));
 
     require(receiver != address(0), "ERC721: mint to the zero address");
     require(!_isTokenActive(tokenId), "ERC721: token already minted");
@@ -53,22 +50,18 @@ contract ERC721soul is
     emit Transfer(address(0), receiver, tokenId);
   }
 
-  function _transfer(
-    address from,
-    address to,
-    uint256 tokenId
-  ) internal {
+  function _transfer(address, address, uint256) internal pure override {
     require(false, "ERC721: soul-bound tokens cannot be transferred");
   }
 
-  function _hasOwnToken(address owner) internal returns (bool) {
-    uint256 ownerTokenId = uint256(owner);
+  function _hasOwnToken(address owner) internal view returns (bool) {
+    uint256 ownerTokenId = uint256(uint160(owner));
     address currentOwner = _owners[ownerTokenId];
     return (_isTokenActive(ownerTokenId) && (currentOwner == owner || currentOwner == address(0)));
   }
 
-  function _isTokenActive(uint256 tokenId) internal returns (bool) {
+  function _isTokenActive(uint256 tokenId) internal view returns (bool) {
     // Check if Token is Active and Not Burned
-    return (_activeTokens[tokenId] && _owners[ownerTokenId] != _NULL_ADDRESS);
+    return (_activeTokens[tokenId] && _owners[tokenId] != _NULL_ADDRESS);
   }
 }
