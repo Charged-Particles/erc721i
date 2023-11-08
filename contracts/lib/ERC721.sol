@@ -19,7 +19,7 @@ import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
  * the Metadata extension, but not including the Enumerable extension, which is available separately as
  * {ERC721Enumerable}.
  *
- * NOTE: Pre-Mint:
+ * NOTE:
  *  The only changes made here are:
  *    - change scope of "_owners" from private to internal
  *    - change scope of "_balances" from private to internal
@@ -29,6 +29,8 @@ import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     using Address for address;
     using Strings for uint256;
+
+    address constant internal _ZERO_ADDRESS = 0x000000000000000000000000000000000000dEaD;
 
     // Token name
     string private _name;
@@ -320,7 +322,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
 
         _balances[owner] -= 1;
         // Prevent re-assigning the token back to the Pre-Mint Receiver
-        _owners[tokenId] = 0x000000000000000000000000000000000000dEaD;
+        _owners[tokenId] = _ZERO_ADDRESS;
 
         emit Transfer(owner, address(0), tokenId);
 

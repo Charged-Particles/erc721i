@@ -23,7 +23,7 @@ contract ERC721all is
   Ownable,
   ERC721
 {
-  mapping(uint256 => bool) internal _isTokenActive;
+  mapping(uint256 => bool) internal _activeTokens;
 
   constructor(string memory name, string memory symbol) ERC721(name, symbol) {}
 
@@ -43,7 +43,7 @@ contract ERC721all is
    * @dev Overrides {IERC721-ownerOf}.
    */
   function ownerOf(uint256 tokenId) public view override returns (address) {
-    require(_isTokenActive[tokenId], "ERC721: invalid token ID");
+    require(_isTokenActive(tokenId), "ERC721: invalid token ID");
 
     // If token has been transfered then _owners will be populated,
     // otherwise the token ID represents the initial owner
@@ -63,10 +63,10 @@ contract ERC721all is
     uint256 tokenId = uint256(receiver);
 
     require(receiver != address(0), "ERC721: mint to the zero address");
-    require(!_isTokenActive[tokenId], "ERC721: token already minted");
+    require(!_isTokenActive(tokenId), "ERC721: token already minted");
 
     // Mark Token as Active
-    _isTokenActive[tokenId] = true;
+    _activeTokens[tokenId] = true;
 
     // Fire Transfer Event
     emit Transfer(address(0), receiver, tokenId);
@@ -101,6 +101,11 @@ contract ERC721all is
   function _hasOwnToken(address owner) internal returns (bool) {
     uint256 ownerTokenId = uint256(owner);
     address currentOwner = _owners[ownerTokenId];
-    return (_isTokenActive[ownerTokenId] && (currentOwner == owner || currentOwner == address(0)));
+    return (_isTokenActive(ownerTokenId) && (currentOwner == owner || currentOwner == address(0)));
+  }
+
+  function _isTokenActive(uint256 tokenId) internal returns (bool) {
+    // Check if Token is Active and Not Burned
+    return (_activeTokens[tokenId] && _owners[ownerTokenId] != _ZERO_ADDRESS);
   }
 }
